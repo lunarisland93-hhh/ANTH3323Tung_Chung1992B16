@@ -1,0 +1,581 @@
+/* =========================================================
+   《開箱東涌：1992 田野調查簿》
+   視覺規則：暖紙白底 / 墨黑褐字 / 苔蘚綠單一強調色
+   分層只用底色階，不用細線；陰影只留給真正浮起的元件
+   ========================================================= */
+
+:root {
+  /* 色彩：一個底色階 + 一個墨色 + 一個強調色 */
+  --paper:      #F5F0E6;   /* 暖紙白：主背景 */
+  --paper-2:    #EFE8DA;   /* 淺紙棕一階：面板、側欄 */
+  --paper-3:    #E7DFCE;   /* 淺紙棕二階：照片墊、分隔區 */
+  --tan:        #D8C5A8;   /* 分隔及輔助區域 */
+  --ink:        #38332E;   /* 墨黑褐：正文與線條 */
+  --ink-2:      #6E665C;   /* 次要文字 */
+  --ink-3:      #8C8477;   /* 標籤文字 */
+  --moss:       #71816B;   /* 苔蘚綠：唯一強調色（選取與操作） */
+  --moss-deep:  #5E6E59;
+  --moss-tint:  #E2E6DD;
+  --kraft:      #C6A57B;   /* 牛皮紙：紙箱 */
+  --kraft-dark: #A9855F;
+  --kraft-light:#DCC5A2;   /* 牛皮紙面板 */
+
+  /* 90 年代香港：紅白藍帆布條紋（自繪圖案，點綴用） */
+  --hk-red:  #A6463C;
+  --hk-blue: #3C5A74;
+  --stripe: repeating-linear-gradient(90deg, /* taste-skill-ignore：紅白藍是實色條紋圖案，非漸層效果 */
+    var(--hk-red) 0 14px, #F5F0E6 14px 28px, var(--hk-blue) 28px 42px);
+
+  /* 字型：明體標題 + 黑體正文 */
+  --serif: "Noto Serif TC", "Songti TC", "PingFang TC", "Times New Roman", serif;
+  --sans:  "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+
+  /* 字級 */
+  --fs-site:  clamp(22px, 1.9vw, 27px);
+  --fs-h2:    19px;
+  --fs-body:  16.5px;
+  --fs-small: 14px;
+  --fs-meta:  13px;
+  --fs-label: 12.5px;
+
+  --r:      2px;          /* 統一方角，像書頁不是卡片 */
+  --gap:    1.25rem;
+
+  /* 紙紋：低對比，只鋪在最底層 */
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");
+  /* 舊紙纖維紋（用戶提供素材之半透明衍生版）：鋪在各面板，不影響文字 */
+  --tex: url("../assets/paper-grain.png");
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { background: var(--paper); }
+
+body {
+  position: relative; z-index: 0;
+  font-family: var(--sans);
+  font-size: var(--fs-body);
+  line-height: 1.7;
+  color: var(--ink);
+  background: transparent;
+  -webkit-font-smoothing: antialiased;
+}
+/* 舊紙紋理：低透明度鋪在最底層，不蓋住文字與面板 */
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1;
+  background: url("../assets/paper-texture.jpg") repeat;
+  background-size: 400px;
+  opacity: .32;
+  pointer-events: none;
+}
+
+button { font-family: var(--sans); font-size: var(--fs-meta); cursor: pointer; }
+:focus-visible { outline: 2px solid var(--moss); outline-offset: 2px; }
+.hidden { display: none !important; }
+
+/* ---------- 共用按鈕 ---------- */
+.btn-primary {
+  background: var(--moss); color: var(--paper);
+  border: none; border-radius: var(--r);
+  padding: .7rem 1.9rem; font-size: var(--fs-small); letter-spacing: .06em;
+  transition: background .18s ease;
+}
+.btn-primary:hover { background: var(--moss-deep); }
+
+.btn-text {
+  background: none; border: none; color: var(--ink-3);
+  font-size: var(--fs-meta); text-decoration: underline; text-underline-offset: 3px;
+}
+.btn-text:hover { color: var(--ink); }
+
+/* =========================================================
+   開箱首屏：紙箱 → 調查圖冊 → 進入網站
+   ========================================================= */
+#intro {
+  position: fixed; inset: 0; z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent;   /* 透出底層舊紙紋理 */
+}
+.intro-inner { text-align: center; padding: 2rem; }
+.intro-title {
+  font-family: var(--serif); font-weight: 700;
+  font-size: clamp(34px, 5vw, 52px); line-height: 1.05;
+  letter-spacing: .06em; color: var(--ink);
+}
+.intro-sub {
+  font-size: var(--fs-meta); letter-spacing: .18em; color: var(--ink-2);
+  margin-top: .7rem;
+}
+
+/* 紙箱 */
+.kraft-box {
+  width: 300px; height: 172px; margin: 3rem auto 2.6rem;
+  position: relative;
+}
+.box-body {
+  position: absolute; bottom: 0; width: 100%; height: 118px;
+  background-color: var(--kraft);
+  background-image: var(--tex); background-size: 300px;
+  border-bottom: 10px solid var(--kraft-dark);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2;
+}
+.box-plate {
+  font-family: var(--serif); font-size: 15px; letter-spacing: .22em;
+  color: rgba(255,255,255,.92);
+}
+.box-lid {
+  position: absolute; top: 0; width: 100%; height: 54px;
+  background-color: var(--kraft-dark);
+  background-image: var(--tex); background-size: 300px;
+  z-index: 4;
+  display: flex; align-items: center; justify-content: center;
+  transform-origin: left bottom;
+  transition: transform .55s cubic-bezier(.33,.9,.4,1), opacity .4s ease .35s;
+}
+/* 紅白藍封箱膠帶：貼在箱口邊 */
+.box-lid::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 8px;
+  background: var(--stripe); opacity: .9;
+}
+.lid-plate {
+  font-family: var(--serif); font-size: 13px; letter-spacing: .3em;
+  color: rgba(255,255,255,.8);
+}
+/* 圖冊：蓋子打開後升起 */
+.box-album {
+  position: absolute; left: 26px; right: 26px; bottom: 14px; height: 132px;
+  background: var(--paper); z-index: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .35rem; opacity: 0;
+  transform: translateY(0);
+  transition: transform .6s cubic-bezier(.33,.9,.4,1) .25s, opacity .35s ease .25s;
+}
+.box-album::before {         /* 書脊 */
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 14px;
+  background: var(--moss);
+}
+.album-title {
+  font-family: var(--serif); font-weight: 600; font-size: 17px;
+  letter-spacing: .1em; color: var(--ink);
+}
+.album-meta { font-size: var(--fs-label); letter-spacing: .1em; color: var(--ink-2); }
+
+.kraft-box.opened .box-lid { transform: rotate(-13deg) translate(-26px, -22px); opacity: 0; }
+.kraft-box.opened .box-album { transform: translateY(-104px); opacity: 1; }
+
+.intro-actions { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .box-lid, .box-album { transition: none; }
+}
+
+/* =========================================================
+   主頁框架
+   ========================================================= */
+#main { display: flex; flex-direction: column; height: 100svh; }
+
+.header {
+  flex-shrink: 0; padding: .85rem 1.5rem;
+  background-color: var(--paper-2);
+  background-image: var(--tex); background-size: 400px;
+  display: flex; align-items: baseline; gap: 1.5rem; flex-wrap: wrap;
+}
+.header h1 {
+  font-family: var(--serif); font-weight: 600; font-size: var(--fs-site);
+  letter-spacing: .05em; line-height: 1.2; white-space: nowrap;
+}
+.intro-text { font-size: var(--fs-meta); color: var(--ink-2); max-width: 68ch; line-height: 1.65; }
+
+.layout { display: flex; flex: 1; min-height: 0; }
+
+/* ---------- 分頁切換：地圖 / 照片牆 / 背景說明 ---------- */
+.view-tabs {
+  margin-left: auto; display: flex; gap: 2px; align-self: center;
+}
+.view-tab {
+  background: var(--paper); border: none; border-radius: var(--r) var(--r) 0 0;
+  padding: .42rem 1rem .38rem; font-size: var(--fs-meta); letter-spacing: .08em;
+  color: var(--ink-2); transition: background .15s ease, color .15s ease;
+}
+.view-tab:hover { background: var(--tan); color: var(--ink); }
+.view-tab.active { background: var(--moss); color: var(--paper); }
+
+/* 非地圖分頁：可捲動的紙面 */
+#view-wall, #view-text { flex: 1; min-height: 0; overflow-y: auto; }
+
+/* 照片牆 */
+.wall-head {
+  max-width: 1080px; margin: 0 auto; padding: 1.1rem 1.5rem .3rem;
+  display: flex; align-items: baseline; gap: 1.2rem; flex-wrap: wrap;
+}
+.wall-hint { font-size: var(--fs-label); color: var(--ink-3); }
+.wall-grid {
+  max-width: 1080px; margin: 0 auto; padding: 1rem 1.5rem 2.2rem;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(158px, 1fr));
+  gap: 1rem;
+}
+.wall-item {
+  background-color: var(--paper);
+  background-image: var(--tex); background-size: 300px;
+  padding: .55rem .55rem .7rem; border: none; text-align: left;
+  cursor: pointer; transition: transform .15s ease;
+}
+.wall-item:hover { transform: translateY(-3px); }
+.wall-item img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+.wall-cap { display: flex; align-items: baseline; justify-content: space-between; margin-top: .45rem; gap: .4rem; }
+.wall-id { font-family: var(--serif); font-weight: 600; font-size: 12.5px; letter-spacing: .08em; color: var(--moss); white-space: nowrap; }
+.wall-sub {
+  font-size: 11.5px; color: var(--ink-2); overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* 背景說明匯總 */
+.text-body { max-width: 760px; margin: 0 auto; padding: 1.6rem 1.5rem 2.4rem; }
+.text-intro { font-size: var(--fs-small); color: var(--ink-2); line-height: 1.8; margin-bottom: 1.6rem; }
+.t-entry { margin-bottom: 1.9rem; }
+.t-head { display: flex; align-items: baseline; gap: .7rem; flex-wrap: wrap; margin-bottom: .3rem; }
+.t-title {
+  font-family: var(--serif); font-weight: 600; font-size: 18px; letter-spacing: .03em;
+}
+.t-range { font-size: var(--fs-label); color: var(--ink-3); letter-spacing: .05em; }
+.t-ids { display: flex; flex-wrap: wrap; gap: .3rem; margin: .3rem 0 .55rem; }
+.t-id {
+  background: var(--paper-2); border: none; border-radius: var(--r);
+  padding: .12rem .45rem; font-size: 11.5px; letter-spacing: .06em; color: var(--moss-deep);
+  cursor: pointer; font-family: var(--sans);
+}
+.t-id:hover { background: var(--moss); color: var(--paper); }
+.t-text {
+  background-color: var(--paper);
+  background-image: var(--tex); background-size: 340px;
+  padding: .9rem 1.05rem; font-size: var(--fs-small); color: var(--ink);
+  line-height: 1.85;
+}
+.t-source {
+  margin-top: 2rem; padding-top: .9rem; border-top: 2px solid var(--tan);
+  font-size: 11.5px; color: var(--ink-3); line-height: 1.65;
+}
+
+/* ---------- 左欄：牛皮紙資料夾 ---------- */
+.sidebar {
+  width: 236px; flex-shrink: 0; padding: 1.15rem 1rem 1.5rem;
+  background-color: var(--kraft-light);
+  background-image: var(--tex); background-size: 400px;
+  overflow-y: auto;
+}
+.folder-stripe {           /* 紅白藍帆布帶：資料夾邊，全站唯一彩色圖案 */
+  height: 7px; margin: -1.15rem -1rem 1.1rem; background: var(--stripe);
+}
+.sidebar h2 {
+  font-family: var(--serif); font-weight: 600; font-size: var(--fs-h2);
+  letter-spacing: .1em;
+  display: inline-block; margin-bottom: .7rem;
+  background: var(--kraft-dark); color: var(--paper);
+  padding: .28rem .95rem .22rem; border-radius: 6px 6px 0 0;
+}
+.sidebar h3 {
+  font-size: var(--fs-label); font-weight: 500; letter-spacing: .14em;
+  color: var(--ink-3); margin: 1.4rem 0 .5rem;
+}
+
+.site-list { display: flex; flex-direction: column; gap: 3px; }
+.site-item {
+  display: flex; align-items: center; gap: .55rem; width: 100%;
+  padding: .5rem .55rem; cursor: pointer; border-radius: var(--r);
+  font-family: var(--sans); font-size: var(--fs-small); color: var(--ink);
+  text-align: left;
+  background: var(--paper); border: none; border-left: 3px solid transparent;
+  transition: background .15s ease, border-color .15s ease;
+}
+.site-item:hover { background: var(--tan); }
+.site-item.active { background: var(--moss-tint); border-left-color: var(--moss); font-weight: 500; }
+.site-thumb { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; mix-blend-mode: multiply; }
+.s-name { flex: 1; }
+.s-count { font-size: var(--fs-label); color: var(--ink-3); }
+
+/* ---------- 篩選器：紙頁標籤 ---------- */
+.filters { display: flex; flex-direction: column; gap: .8rem; margin-bottom: .4rem; }
+.f-name {
+  display: block; font-size: var(--fs-label); letter-spacing: .14em;
+  color: var(--ink-3); margin-bottom: .35rem;
+}
+.f-chips { display: flex; flex-wrap: wrap; gap: .3rem; }
+.f-chip {
+  background: var(--paper); border: none; border-radius: var(--r);
+  padding: .26rem .55rem; font-size: var(--fs-label); color: var(--ink-2);
+  line-height: 1.5; transition: background .15s ease, color .15s ease;
+}
+.f-chip:hover { background: var(--tan); color: var(--ink); }
+.f-chip[aria-pressed="true"] { background: var(--moss); color: var(--paper); }
+.f-clear {
+  align-self: flex-start; background: none; border: none; padding: 0;
+  color: var(--ink-3); font-size: var(--fs-label);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.f-clear:hover { color: var(--ink); }
+.f-status {
+  font-size: var(--fs-label); color: var(--ink-3);
+  margin: .1rem 0 .8rem; letter-spacing: .04em;
+}
+
+.layer-row { display: flex; align-items: center; gap: .6rem; }
+.layer-row input[type=range] { flex: 1; accent-color: var(--moss); }
+.layer-val { font-size: var(--fs-label); color: var(--ink-3); min-width: 2.6em; text-align: right; }
+
+.legend { list-style: none; display: flex; flex-direction: column; gap: .35rem; }
+.legend li { display: flex; align-items: center; gap: .5rem; font-size: var(--fs-label); color: var(--ink-2); }
+
+.load-error { font-size: var(--fs-meta); color: var(--ink); line-height: 1.7; }
+
+/* ---------- 地圖 ---------- */
+.map-wrap { flex: 1; min-width: 0; position: relative; }
+#map { width: 100%; height: 100%; background: #EDE9DE; }
+
+/* 1982 地形圖（拼接版） */
+.leaflet-overlay-pane img[src*="tung-chung-1982-stitch"] {
+  filter: sepia(.22) saturate(.55) contrast(.96);
+  mix-blend-mode: multiply;
+}
+
+/* 標記：同一個綠，用形狀區分精度，不引入第二個強調色 */
+.dot {
+  display: inline-block; width: 15px; height: 15px; border-radius: 50%;
+  background: var(--paper);
+  box-shadow: 0 0 0 2px rgba(255,255,255,.85); /* taste-skill-ignore：地圖標記浮在底圖上，白色描邊是辨識必需 */
+}
+.dot--exact   { background: var(--moss); border: 3px solid var(--paper); }
+.dot--approx  { background: var(--paper); border: 3px solid var(--moss); }
+.dot--village { background: var(--paper); border: 3px dashed var(--ink-3); }
+.marker-wrap { display: block; width: 15px; height: 15px; transition: transform .18s ease; }
+.photo-dot:not(.marker-sel):hover .marker-wrap { transform: scale(1.3); }
+.marker-sel .marker-wrap { transform: scale(1.5); }
+.marker-sel .dot { box-shadow: 0 0 0 3px var(--moss-tint), 0 0 0 2px rgba(255,255,255,.9); } /* taste-skill-ignore：選取態描邊 */
+
+/* 叢集大點：苔蘚綠紙感，數字為照片張數 */
+.marker-cluster {
+  display: flex; align-items: center; justify-content: center;
+  background-color: var(--moss);
+  border: 3px solid var(--paper);
+  box-shadow: 0 0 0 2px rgba(255,255,255,.75); /* taste-skill-ignore：地圖元件辨識描邊 */
+  border-radius: 50%;
+  transition: transform .18s ease;
+}
+.marker-cluster:hover { transform: scale(1.08); }
+.cluster-n {
+  font-family: var(--sans); font-weight: 500; font-size: 13px;
+  color: var(--paper); line-height: 1;
+}
+
+/* 站點標籤 */
+.site-tag {
+  display: inline-flex; align-items: center; gap: .35rem;
+  background: var(--paper); padding: .15rem .55rem; border-radius: var(--r);
+  font-family: var(--sans); font-size: 13px; color: var(--ink); white-space: nowrap;
+}
+.site-tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--moss); }
+
+/* Leaflet 控制元件：統一為方形紙片 */
+.leaflet-bar { border: none; box-shadow: none; } /* taste-skill-ignore：移除 Leaflet 預設陰影 */
+.leaflet-bar a, .leaflet-bar a:hover {
+  background: var(--kraft-light); color: var(--ink);
+  border-radius: var(--r); width: 28px; height: 28px; line-height: 28px;
+  font-size: 15px;
+}
+.leaflet-bar a + a { margin-top: 2px; }
+.leaflet-bar a:hover { background: var(--kraft); }
+.leaflet-control-attribution {
+  background: rgba(245,240,230,.92) !important;
+  font-size: 11px !important; color: var(--ink-2);
+}
+.leaflet-container { font-family: var(--sans); }
+
+/* ---------- 右欄：牛皮紙資料夾 + 內頁圖冊條目 ---------- */
+.photo-panel {
+  width: 352px; flex-shrink: 0; overflow-y: auto;
+  background-color: var(--kraft-light);
+  background-image: var(--tex); background-size: 400px;
+}
+.photo-empty {
+  display: flex; align-items: center; justify-content: center;
+  height: 100%; padding: 2rem;
+}
+.empty-note {
+  background-color: var(--paper);
+  background-image: var(--tex); background-size: 340px;
+  padding: 1.9rem 1.5rem 1.7rem;
+  max-width: 248px; text-align: center;
+}
+.empty-mark {
+  display: block; width: 56px; height: 44px; margin: 0 auto .9rem;
+  background: var(--paper-3); border: 5px solid var(--kraft-light);
+}
+.empty-title {
+  font-family: var(--serif); font-weight: 600; font-size: 16px;
+  letter-spacing: .06em; margin-bottom: .45rem;
+}
+.empty-hint { font-size: var(--fs-label); color: var(--ink-2); line-height: 1.75; }
+.photo-card {
+  margin: 1rem 1rem 1.4rem; padding: 1.3rem 1.35rem 1.5rem;
+  background-color: var(--paper);
+  background-image: var(--tex); background-size: 340px;
+}
+
+.p-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: .4rem; }
+.p-id {
+  font-family: var(--serif); font-weight: 600; font-size: 15px;
+  letter-spacing: .12em; color: var(--moss);
+}
+.p-pos { font-size: var(--fs-label); color: var(--ink-3); letter-spacing: .06em; }
+.p-subject {
+  font-family: var(--serif); font-weight: 600; font-size: 21px;
+  line-height: 1.35; letter-spacing: .02em; margin-bottom: .25rem;
+}
+.p-place { font-size: var(--fs-meta); color: var(--ink-2); margin-bottom: 1rem; }
+
+/* 票夾式照片：四角以牛皮紙相角裱裝 */
+.p-photo { position: relative; background: var(--paper-3); padding: 9px; margin-bottom: 1.1rem; }
+.p-photo img { width: 100%; display: block; cursor: zoom-in; }
+.p-photo::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: /* taste-skill-ignore：四枚實色三角形相角，非漸層效果 */
+    linear-gradient(135deg, var(--kraft-dark) 50%, transparent 50.5%) 0 0        / 24px 24px no-repeat, /* taste-skill-ignore */
+    linear-gradient(225deg, var(--kraft-dark) 50%, transparent 50.5%) 100% 0    / 24px 24px no-repeat, /* taste-skill-ignore */
+    linear-gradient(45deg,  var(--kraft-dark) 50%, transparent 50.5%) 0 100%    / 24px 24px no-repeat, /* taste-skill-ignore */
+    linear-gradient(315deg, var(--kraft-dark) 50%, transparent 50.5%) 100% 100% / 24px 24px no-repeat; /* taste-skill-ignore */
+}
+/* taste-skill-ignore-end */
+
+.p-zoom {
+  position: absolute; top: 13px; right: 13px; z-index: 3;
+  background: var(--paper); border: none; border-radius: var(--r);
+  padding: .2rem .5rem; font-size: 11.5px; letter-spacing: .05em; color: var(--ink);
+  opacity: .92;
+}
+.p-zoom:hover { background: var(--tan); }
+.p-zoom.on { background: var(--moss); color: var(--paper); }
+
+/* 放大鏡鏡片：真正浮起的元件，允許陰影 */
+.lens {
+  position: fixed; width: 170px; height: 170px; border-radius: 50%;
+  border: 2px solid var(--moss); background-repeat: no-repeat;
+  pointer-events: none; z-index: 800; opacity: 0;
+  box-shadow: 0 4px 18px rgba(56,51,46,.35); /* taste-skill-ignore：放大鏡鏡片是浮動元件 */
+}
+.lens[hidden] { display: none; }
+
+/* 原圖檢視（點按照片）：浮層 */
+.lightbox {
+  position: fixed; inset: 0; z-index: 900;
+  background: rgba(56,51,46,.93);
+  display: flex; align-items: center; justify-content: center;
+  cursor: zoom-out;
+}
+.lightbox[hidden] { display: none; }   /* hidden 屬性必須壓過 display:flex */
+.lightbox img { max-width: 96vw; max-height: 94vh; display: block; }
+
+.p-note { font-size: var(--fs-body); line-height: 1.75; margin-bottom: 1.2rem; }
+
+.p-meta {
+  display: grid; grid-template-columns: 5.2rem 1fr;
+  gap: .35rem .8rem; font-size: var(--fs-meta);
+  padding: .9rem 0 1.1rem; border-top: 2px solid var(--paper-3);
+}
+.p-meta dt { color: var(--ink-3); font-size: var(--fs-label); }
+.p-meta dd { color: var(--ink); }
+
+.p-more {
+  background: none; border: none; padding: 0; margin-bottom: .7rem;
+  color: var(--ink-3); font-size: var(--fs-label); letter-spacing: .1em;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.p-more:hover { color: var(--ink); }
+.p-more-info {
+  background: var(--paper-2); padding: .8rem .9rem; margin-bottom: .9rem;
+  font-size: var(--fs-meta); color: var(--ink-2); line-height: 1.7;
+  border-left: 3px solid var(--tan);
+}
+.p-source {
+  margin-top: .8rem; padding-top: .7rem;
+  border-top: 2px solid var(--paper-3);
+  font-size: 11.5px; color: var(--ink-3); line-height: 1.65;
+}
+
+.p-nav { display: flex; gap: .5rem; }
+.p-nav button {
+  flex: 1; background: var(--paper-2); border: none; border-radius: var(--r);
+  padding: .55rem .5rem; font-size: var(--fs-meta); color: var(--ink);
+  transition: background .15s ease;
+}
+.p-nav button:hover { background: var(--tan); }
+
+/* =========================================================
+   手機版：地圖與記錄依序閱讀，不用浮動面板蓋住地圖
+   ========================================================= */
+@media (max-width: 900px) {
+  #main { height: auto; min-height: 100svh; }
+  .header { padding: .8rem 1.1rem; gap: .5rem; }
+  .header h1 { font-size: 21px; white-space: normal; }
+  .intro-text { font-size: var(--fs-label); }
+
+  .view-tabs { margin-left: 0; width: 100%; }
+  .view-tab { flex: 1; padding: .42rem .4rem .38rem; }
+
+  .layout { display: block; }
+
+  .sidebar {
+    width: 100%; padding: .9rem 1.1rem 1rem; overflow: visible;
+  }
+  .folder-stripe { margin: -.9rem -1.1rem .8rem; }
+  .sidebar h3, .layer-row, .legend { display: none; }   /* 次要控制收起，桌面仍可用 */
+  .site-list {
+    flex-direction: row; gap: .4rem;
+    overflow-x: auto; padding-bottom: .2rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .site-item {
+    flex: 0 0 auto; width: auto; padding: .45rem .75rem;
+    border-left: none; border-radius: var(--r);
+  }
+  .site-item.active { border-left: none; outline: 2px solid var(--moss); }
+  .site-thumb { width: 20px; height: 20px; }
+
+  .map-wrap { height: 46svh; min-height: 260px; }
+
+  .photo-panel { width: 100%; overflow: visible; }
+  .photo-empty { height: auto; padding: 2.2rem 1.5rem; }
+  .photo-card { margin: .9rem .9rem 1.6rem; padding: 1.2rem 1.15rem 1.8rem; }
+  .p-subject { font-size: 20px; }
+  .p-meta { grid-template-columns: 4.8rem 1fr; }
+  .lens { display: none; }   /* 觸控裝置：點按照片直接看原圖 */
+
+  .wall-grid { grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); padding: .8rem 1rem 1.8rem; }
+  .wall-head { padding: .8rem 1rem .2rem; }
+  .text-body { padding: 1.1rem 1rem 1.8rem; }
+}
+
+/* =========================================================
+   動態：只做短暫的淡入與選取回饋
+   ========================================================= */
+.header, .sidebar, .photo-panel { transition: opacity .45s ease, transform .45s cubic-bezier(.22,.7,.3,1); }
+.map-wrap { transition: opacity .45s ease; }
+#main.enter .header        { opacity: 0; transform: translateY(8px); }
+#main.enter .sidebar       { opacity: 0; transform: translateY(8px); transition-delay: .07s; }
+#main.enter .map-wrap      { opacity: 0; transition-delay: .13s; }
+#main.enter .photo-panel   { opacity: 0; transform: translateY(8px); transition-delay: .18s; }
+#main.is-in .header, #main.is-in .sidebar, #main.is-in .photo-panel { opacity: 1; transform: none; }
+#main.is-in .map-wrap { opacity: 1; }
+
+/* 換記錄時的一次性淡入 */
+.photo-card.fresh { animation: cardIn .22s ease both; }
+@keyframes cardIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  #main.enter .header, #main.enter .sidebar, #main.enter .map-wrap, #main.enter .photo-panel {
+    opacity: 1; transform: none;
+  }
+}

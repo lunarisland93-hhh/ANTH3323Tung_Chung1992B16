@@ -1,0 +1,138 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.931261,
+          22.280235
+        ]
+      },
+      "properties": {
+        "site_id": "S01",
+        "place_name": "東涌侯王宮（侯王廟）",
+        "site_type": "廟宇",
+        "photo_count": 12,
+        "photo_ids": "B16P01,B16P02,B16P03,B16P04,B16P05,B16P06,B16P07,B16P08,B16P09,B16P10,B16P11,B16P12",
+        "chapter": "一鄉之廟",
+        "icon": "assets/icons/S01.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.929305,
+          22.26566
+        ]
+      },
+      "properties": {
+        "site_id": "S02",
+        "place_name": "東涌羅漢寺",
+        "site_type": "佛寺",
+        "photo_count": 6,
+        "photo_ids": "B16P13,B16P14,B16P15,B16P16,B16P17,B16P18",
+        "chapter": "山中佛寺",
+        "icon": "assets/icons/S02.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.930924,
+          22.27984
+        ]
+      },
+      "properties": {
+        "site_id": "S03",
+        "place_name": "東涌區康樂中心",
+        "site_type": "家宅祭祀",
+        "photo_count": 5,
+        "photo_ids": "B16P19,B16P20,B16P21,B16P22,B16P23",
+        "chapter": "海與遷移",
+        "icon": "assets/icons/S03.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.939733,
+          22.278758
+        ]
+      },
+      "properties": {
+        "site_id": "S04",
+        "place_name": "聖母訪親堂前身",
+        "site_type": "基督宗教",
+        "photo_count": 5,
+        "photo_ids": "B16P24,B16P25,B16P26,B16P27,B16P28",
+        "chapter": "多重信仰",
+        "icon": "assets/icons/S04.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.890425,
+          22.277353
+        ]
+      },
+      "properties": {
+        "site_id": "S05",
+        "place_name": "深石村深石亭",
+        "site_type": "村落神祠",
+        "photo_count": 1,
+        "photo_ids": "B16P29",
+        "chapter": "門內門外",
+        "icon": "assets/icons/S05.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.93471,
+          22.28325
+        ]
+      },
+      "properties": {
+        "site_id": "S06",
+        "place_name": "大圍坑村（待核）",
+        "site_type": "家宅祭祀",
+        "photo_count": 6,
+        "photo_ids": "B16P30,B16P31,B16P32,B16P33,B16P34,B16P35",
+        "chapter": "門內門外",
+        "icon": "assets/icons/S06.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.936622,
+          22.2784627
+        ]
+      },
+      "properties": {
+        "site_id": "S07",
+        "place_name": "東涌炮臺（古堡炮臺）附近",
+        "site_type": "村落神祠",
+        "photo_count": 1,
+        "photo_ids": "B16P36",
+        "chapter": "門內門外",
+        "icon": "assets/icons/S07.png"
+      }
+    }
+  ]
+}
